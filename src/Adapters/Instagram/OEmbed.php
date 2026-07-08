@@ -14,17 +14,13 @@ class OEmbed extends Base
     {
         $token = $this->extractor->getSetting('instagram:token');
 
-        if (!is_string($token) || $token === '') {
-            return null;
-        }
-
         $uri = $this->extractor->getUri();
         if (strpos($uri->getPath(), 'login') !== false) {
             $uri = $this->extractor->getRequest()->getUri();
         }
 
         $queryParameters = $this->getOembedQueryParameters((string) $uri);
-        $queryParameters['access_token'] = $token;
+        if($token) $queryParameters['access_token'] = $token;
 
         return $this->extractor->getCrawler()
             ->createUri(self::ENDPOINT)
